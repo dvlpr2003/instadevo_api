@@ -157,8 +157,45 @@ class Instagram_Downloader(APIView):
         except:
             return Response({"status":"faild"})
 
-def final(request):
-     return Response({"hi":"hi"})
+from instaloader.exceptions import ProfileNotExistsException, ConnectionException, BadResponseException, LoginRequiredException
+class GetProfileInfo(APIView):
+     
+     def get(self,request,username):
+            
+            loader = instaloader.Instaloader()
+          
+            try:
+                loader.load_session_from_file('lootdealshunter')
+            except FileNotFoundError:
+                print("Session file not found. Please log in using the command line first.")
+                return 
 
+            try:
+                profile = instaloader.Profile.from_username(loader.context, username)
+                
+                profile_details = {
+                    'username': profile.username,
+                    'full_name': profile.full_name,
+                    'bio': profile.biography,
+                    'followers': profile.followers,
+                    'following': profile.followees,
+                    'posts': profile.mediacount,
+                    'profile_pic_url': profile.profile_pic_url
+                }
+                
+                return Response(profile_details)
+            except ProfileNotExistsException:
+                return Response({'status':f"Profile '{username}' does not exist."})
+            except LoginRequiredException:
+                return Response({'status':"Login required to access this profile."})
+            except ConnectionException as e:
+                return Response({'status':f"Connection error: {e}"})
+            except BadResponseException as e:
+                return Response({'status':f"Bad response error: {e}"})
+            except Exception as e:
+                return Response({'status':f"An error occurred: {e}"})
+
+          
+     
 
 

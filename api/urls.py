@@ -7,5 +7,5 @@ from .views import *
 urlpatterns = [
     path('download-instagram-post/<str:url>/', Instagram_Downloader.as_view(), name='download_instagram_post'),
     # path('proxy/', ProxyView, name='proxy-view'),
-    path("<str:url>",final),
+    path('get-profile-info/<str:username>/',GetProfileInfo.as_view(),name='get-profile-info'),
 ]

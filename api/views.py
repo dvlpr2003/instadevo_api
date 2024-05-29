@@ -7,7 +7,7 @@ from rest_framework import status
 
 from .models import *
 import requests
-
+import os
 import instaloader
 
 class Instagram_Downloader(APIView):
@@ -163,15 +163,25 @@ class GetProfileInfo(APIView):
      def get(self,request,username):
             
             loader = instaloader.Instaloader()
+            os.system("rm -f ~/.config/instaloader/session-lootdealshunter")
+            userid = os.getenv('INSTAGRAM_USER')
+            password = os.getenv('INSTAGRAM_PASS')
           
             try:
-                loader.load_session_from_file('lootdealshunter')
-            except FileNotFoundError:
-                print("Session file not found. Please log in using the command line first.")
+
+                loader.login(userid,password)
+            except :
+                print("login failed")
                 return 
 
             try:
                 profile = instaloader.Profile.from_username(loader.context, username)
+                img_response = requests.get(profile.profile_pic_url)
+                if img_response.status_code == 200:
+                    image_binary = img_response.content
+                    base64_image = base64.b64encode(image_binary).decode('utf-8')
+                    profile_pic_url = f"data:image/jpeg;base64,{base64_image}"
+
                 
                 profile_details = {
                     'username': profile.username,
@@ -180,7 +190,7 @@ class GetProfileInfo(APIView):
                     'followers': profile.followers,
                     'following': profile.followees,
                     'posts': profile.mediacount,
-                    'profile_pic_url': profile.profile_pic_url
+                    'profile_pic_url': profile_pic_url
                 }
                 
                 return Response(profile_details)
@@ -199,3 +209,38 @@ class GetProfileInfo(APIView):
      
 
 
+
+
+
+# import os
+# import instaloader
+
+# def login_instagram():
+#     # Retrieve credentials from environment variables
+#     os.system("rm -f ~/.config/instaloader/session-lootdealshunter")
+#     print("session deleted successful")
+#     username = os.getenv('INSTAGRAM_USER')
+#     password = os.getenv('INSTAGRAM_PASS')
+    
+#     # Check if the environment variables are set
+#     if not username or not password:
+#         raise ValueError("Instagram credentials not found in environment variables.")
+    
+#     # Create an instance of Instaloader
+#     L = instaloader.Instaloader()
+    
+#     try:
+#         # Log in to Instagram
+#         L.login(username, password)
+#         print("Logged in successfully.")
+#     except instaloader.exceptions.BadCredentialsException:
+#         print("Bad credentials. Please check your username and password.")
+#     except instaloader.exceptions.ConnectionException:
+#         print("Failed to connect to Instagram. Please check your internet connection.")
+#     except instaloader.exceptions.TwoFactorAuthRequiredException:
+#         print("Two-factor authentication is required. Please handle this manually.")
+#     except Exception as e:
+#         print(f"An unexpected error occurred: {e}")
+
+# if __name__ == "__main__":
+#     login_instagram()

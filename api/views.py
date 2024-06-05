@@ -187,15 +187,15 @@ class GetProfileInfo(APIView):
                 for i in loader.get_stories(userids=[profile.userid]): #get profile story
                     for j in range(len(i._node['items'])):
                         img_response = requests.get(i._node['items'][j]['display_url'])
-                    if img_response.status_code == 200:
-                        image_binary = img_response.content
-                        base64_image = base64.b64encode(image_binary).decode('utf-8')
-                        story_cover = f"data:image/jpeg;base64,{base64_image}"
-                        Story = {
-                                "story_cover":story_cover,
-                                "story_video":i._node['items'][j]['video_resources'][0]['src']
-                            }
-                        my_lst.append(Story)
+                        if img_response.status_code == 200:
+                            image_binary = img_response.content
+                            base64_image = base64.b64encode(image_binary).decode('utf-8')
+                            story_cover = f"data:image/jpeg;base64,{base64_image}"
+                            Story = {
+                                    "story_cover":story_cover,
+                                    "story_video":i._node['items'][j]['video_resources'][0]['src']
+                                }
+                            my_lst.append(Story)
 
                 
                 profile_details = {
@@ -208,6 +208,7 @@ class GetProfileInfo(APIView):
                     'profile_pic_url': profile_pic_url,
                     'story':my_lst
                 }
+                print(profile_details)
                 
                 return Response(profile_details)
             except ProfileNotExistsException:

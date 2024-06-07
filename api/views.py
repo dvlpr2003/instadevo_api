@@ -200,7 +200,8 @@ class GetProfileInfo(APIView):
                             except:
                                 Story = {
                                         "story_cover":story_cover,
-                                        "story_video":i._node['items'][j]['display_resources'][0]['src']
+                                        # "story_video":i._node['items'][j]['display_resources'][0]['src']
+                                        "story_video":story_cover
                                     }
                                 my_lst.append(Story)
                 profile_details = {

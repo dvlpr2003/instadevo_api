@@ -8,4 +8,5 @@ urlpatterns = [
     path('download-instagram-post/<str:url>/', Instagram_Downloader.as_view(), name='download_instagram_post'),
     # path('proxy/', ProxyView, name='proxy-view'),
     path('get-profile-info/<str:username>/',GetProfileInfo.as_view(),name='get-profile-info'),
+    path("get-story/<str:usrname>/<str:id>/",GetStory.as_view()),
 ]

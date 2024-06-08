@@ -230,3 +230,44 @@ class GetProfileInfo(APIView):
 
 
 
+class GetStory(APIView):
+     def get(self,request,usrname,id):
+        loader = instaloader.Instaloader()
+        os.system("rm -f ~/.config/instaloader/session-lootdealshunter")
+        userid = os.getenv('INSTAGRAM_USER')
+        password = os.getenv('INSTAGRAM_PASS')
+          
+        try:
+            loader.login(userid,password)
+            print('hi')
+        except :
+            print("login failed")
+            return Response({"status":"login error"})
+       
+        
+            
+        try:
+            my_lst = []
+            profile = instaloader.Profile.from_username(loader.context, usrname)
+            for i in loader.get_stories(userids=[profile.userid]):
+                    if i._node['items'][0]['id'] == str(id):
+                        try:
+                            
+
+                            Story = {
+                                "story_cover":i._node['items'][0]['display_url'],
+                                "story_video":i._node['items'][0]['video_resources'][0]['src']
+                                }
+                            my_lst.append(Story)
+
+                        except:
+                            Story = {
+                                    "story_cover":i._node['items'][0]['display_url'],
+                                    "story_video":i._node['items'][0]['display_resources'][0]['src']
+                                }
+
+                            my_lst.append(Story)
+            return Response(my_lst)
+        except:
+            return Response({"status":"error"})
+

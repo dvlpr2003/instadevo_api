@@ -242,31 +242,31 @@ class GetStory(APIView):
             print('hi')
         except :
             print("login failed")
-            return Response({"status":"login error"})
-       
-        
-            
+            return Response({"status":"login error"})    
         try:
-            my_lst = []
+            my_lst = None
             profile = instaloader.Profile.from_username(loader.context, usrname)
             for i in loader.get_stories(userids=[profile.userid]):
                     if i._node['items'][0]['id'] == str(id):
-                        try:
-                            
+                        img_response = requests.get(i._node['items'][0]['display_url'])
+                        if img_response.status_code == 200:
+                            image_binary = img_response.content
+                            base64_image = base64.b64encode(image_binary).decode('utf-8')
+                            story_cover = f"data:image/jpeg;base64,{base64_image}"
 
-                            Story = {
-                                "story_cover":i._node['items'][0]['display_url'],
-                                "story_video":i._node['items'][0]['video_resources'][0]['src']
-                                }
-                            my_lst.append(Story)
 
-                        except:
-                            Story = {
-                                    "story_cover":i._node['items'][0]['display_url'],
-                                    "story_video":i._node['items'][0]['display_resources'][0]['src']
-                                }
-
-                            my_lst.append(Story)
+                            try:
+                                Story = {
+                                    "story_cover":story_cover,
+                                    "story_video":i._node['items'][0]['video_resources'][0]['src']
+                                    }
+                                my_lst = Story
+                            except:
+                                Story = {
+                                        "story_cover":story_cover,
+                                        "story_video":story_cover
+                                    }
+                                my_lst = Story
             return Response(my_lst)
         except:
             return Response({"status":"error"})

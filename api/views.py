@@ -163,7 +163,7 @@ class GetProfileInfo(APIView):
      def get(self,request,username):
             
             loader = instaloader.Instaloader()
-            os.system("rm -f ~/.config/instaloader/session-lootdealshunter")
+            os.system("rm -f ~/.config/instaloader/session-krishna_.kumar_.054")
             userid = os.getenv('INSTAGRAM_USER')
             password = os.getenv('INSTAGRAM_PASS')
           
@@ -233,7 +233,7 @@ class GetProfileInfo(APIView):
 class GetStory(APIView):
      def get(self,request,usrname,id):
         loader = instaloader.Instaloader()
-        os.system("rm -f ~/.config/instaloader/session-lootdealshunter")
+        os.system("rm -f ~/.config/instaloader/session-krishna_.kumar_.054")
         userid = os.getenv('INSTAGRAM_USER')
         password = os.getenv('INSTAGRAM_PASS')
           

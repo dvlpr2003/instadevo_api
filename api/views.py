@@ -27,15 +27,10 @@ class Instagram_Downloader(APIView):
                     x = post._full_metadata['edge_sidecar_to_children']["edges"]
                 except:
                     img_response = requests.get(post._full_metadata['display_url'])
-                    # video_response = requests.get(post._full_metadata['video_url'])
                     if img_response.status_code == 200:
                         image_binary = img_response.content
-                        # video_binary = video_response.content
-                        # base64_video = base64.b64encode(video_binary).decode('utf-8')
                         base64_image = base64.b64encode(image_binary).decode('utf-8')
                         img_data_url = f"data:image/jpeg;base64,{base64_image}"
-                        # video_data_url = f"data:video/mp4;base64,{base64_video}"
-                   
                         rl = {
                             'url':{
                                 "video" : True,
@@ -54,13 +49,9 @@ class Instagram_Downloader(APIView):
                         if x[i]["node"]['is_video'] :
                             img_response = requests.get(x[i]["node"]["display_resources"][0]["src"])
                             if img_response.status_code == 200:
-
-                            
                                 image_binary = img_response.content
                                 base64_image = base64.b64encode(image_binary).decode('utf-8')
                                 img_data_url = f"data:image/jpeg;base64,{base64_image}"
-                            # url_list.extend([{f'video_c5_img_cover{i}':x[i]["node"]["display_resources"][0]["src"]}])
-                            # url_list.extend([{f'video_c5_{i}':x[i]["node"]["video_url"]}])
                             rl = {
                                 'url':{
                                     "video":True,
@@ -71,7 +62,6 @@ class Instagram_Downloader(APIView):
                             rl_clone.append(rl)
                             
                             continue
-                        # url_list.extend([{f'img_c5_{i}':x[i]["node"]["display_resources"][0]["src"]}])
                         img_response = requests.get(x[i]["node"]["display_resources"][0]["src"])
                         if img_response.status_code == 200:
                                 image_binary = img_response.content
@@ -90,7 +80,6 @@ class Instagram_Downloader(APIView):
                 try :
                     x = post._full_metadata['edge_sidecar_to_children']["edges"]
                 except:
-                    # url_list.extend([{"img_c5_1":post._full_metadata['display_url']}])
                     img_response = requests.get(post._full_metadata['display_url'])
                     if img_response.status_code == 200:
                                 
@@ -163,7 +152,7 @@ class GetProfileInfo(APIView):
      def get(self,request,username):
             
             loader = instaloader.Instaloader()
-            os.system("rm -f ~/.config/instaloader/session-krishna_.kumar_.054")
+            # os.system("rm -f ~/.config/instaloader/session-krishna_.kumar_.054")
             userid = os.getenv('INSTAGRAM_USER')
             password = os.getenv('INSTAGRAM_PASS')
           
@@ -233,7 +222,7 @@ class GetProfileInfo(APIView):
 class GetStory(APIView):
      def get(self,request,usrname,id):
         loader = instaloader.Instaloader()
-        os.system("rm -f ~/.config/instaloader/session-krishna_.kumar_.054")
+        # os.system("rm -f ~/.config/instaloader/session-krishna_.kumar_.054")
         userid = os.getenv('INSTAGRAM_USER')
         password = os.getenv('INSTAGRAM_PASS')
           

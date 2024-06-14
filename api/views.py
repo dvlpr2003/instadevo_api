@@ -155,13 +155,17 @@ class GetProfileInfo(APIView):
             # os.system("rm -f ~/.config/instaloader/session-krishna_.kumar_.054")
             userid = os.getenv('INSTAGRAM_USER')
             password = os.getenv('INSTAGRAM_PASS')
+            session_file = f"session-{userid}"
           
             try:
 
-                loader.login(userid,password)
+                loader.load_session_from_file('krishna_.kumar_.054',session_file)
+        
             except :
-                print("login failed")
-                return 
+               
+                loader.login(userid,password)
+                loader.save_session_to_file(session_file)
+           
             try:
                 profile = instaloader.Profile.from_username(loader.context, username)
                 img_response = requests.get(profile.profile_pic_url)

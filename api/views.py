@@ -162,7 +162,7 @@ class GetProfileInfo(APIView):
                 loader.load_session_from_file('krishna_.kumar_.054',session_file)
         
             except :
-               
+                os.system("rm -f ~/.config/instaloader/session-krishna_.kumar_.054")
                 loader.login(userid,password)
                 loader.save_session_to_file(session_file)
            
@@ -226,16 +226,16 @@ class GetProfileInfo(APIView):
 class GetStory(APIView):
      def get(self,request,usrname,id):
         loader = instaloader.Instaloader()
-        # os.system("rm -f ~/.config/instaloader/session-krishna_.kumar_.054")
         userid = os.getenv('INSTAGRAM_USER')
         password = os.getenv('INSTAGRAM_PASS')
+        session_file = f"session-{userid}"
           
         try:
-            loader.login(userid,password)
-            print('hi')
+            loader.load_session_from_file('krishna_.kumar_.054',session_file)
         except :
-            print("login failed")
-            return Response({"status":"login error"})    
+            os.system("rm -f ~/.config/instaloader/session-krishna_.kumar_.054")
+            loader.login(userid,password)
+            loader.save_session_to_file(session_file)
         try:
             my_lst = None
             profile = instaloader.Profile.from_username(loader.context, usrname)

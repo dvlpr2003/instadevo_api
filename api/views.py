@@ -1,6 +1,6 @@
 import base64
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -160,11 +160,13 @@ class GetProfileInfo(APIView):
             try:
 
                 loader.load_session_from_file('krishna_.kumar_.054',session_file)
+                print('vinupriya')
         
             except :
                 os.system("rm -f ~/.config/instaloader/session-krishna_.kumar_.054")
                 loader.login(userid,password)
                 loader.save_session_to_file(session_file)
+                print("gayathri")
            
             try:
                 profile = instaloader.Profile.from_username(loader.context, username)
@@ -239,29 +241,35 @@ class GetStory(APIView):
         try:
             my_lst = None
             profile = instaloader.Profile.from_username(loader.context, usrname)
+        
+
+
             for i in loader.get_stories(userids=[profile.userid]):
-                    for j in range(len(i._node["items"])):
-                        if i._node['items'][j]['id'] == str(id):
-                            img_response = requests.get(i._node['items'][j]['display_url'])
-                            if img_response.status_code == 200:
-                                image_binary = img_response.content
-                                base64_image = base64.b64encode(image_binary).decode('utf-8')
-                                story_cover = f"data:image/jpeg;base64,{base64_image}"
+                        for j in range(len(i._node["items"])):
+                            if i._node['items'][j]['id'] == str(id):
+                                img_response = requests.get(i._node['items'][j]['display_url'])
+                                if img_response.status_code == 200:
+                                    image_binary = img_response.content
+                                    base64_image = base64.b64encode(image_binary).decode('utf-8')
+                                    story_cover = f"data:image/jpeg;base64,{base64_image}"
 
 
-                                try:
-                                    Story = {
-                                        "story_cover":story_cover,
-                                        "story_video":i._node['items'][j]['video_resources'][0]['src']
-                                        }
-                                    my_lst = Story
-                                except:
-                                    Story = {
+                                    try:
+                                        Story = {
                                             "story_cover":story_cover,
-                                            "story_video":story_cover
-                                        }
-                                    my_lst = Story
+                                            "story_video":i._node['items'][j]['video_resources'][0]['src']
+                                            }
+                                        my_lst = Story
+                                    except:
+                                        Story = {
+                                                "story_cover":story_cover,
+                                                "story_video":story_cover
+                                            }
+                                        my_lst = Story
             return Response(my_lst)
+        
+        
         except:
-            return Response({"status":"error"})
+
+            return HttpResponseNotFound("error")
 

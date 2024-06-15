@@ -42,7 +42,7 @@ class Instagram_Downloader(APIView):
                         url_list.append(rl)
                         return Response(url_list)
                     else:
-                        return Response({'error': 'Failed to fetch Instagram media'})
+                        return HttpResponseNotFound({'error': 'Failed to fetch Instagram media'})
                 else:
                     rl_clone = []
                     for i in range(len(x)):
@@ -94,7 +94,7 @@ class Instagram_Downloader(APIView):
                                 }
                                 url_list.append(rl)
                     else:
-                        return Response({'error': 'Failed to fetch Instagram media'})
+                        return HttpResponseNotFound({'error': 'Failed to fetch Instagram media'})
                     return Response(url_list)
                          
 
@@ -144,7 +144,7 @@ class Instagram_Downloader(APIView):
         
 
         except:
-            return Response({"status":"faild"})
+            return HttpResponseNotFound({"status":"faild"})
 
 from instaloader.exceptions import ProfileNotExistsException, ConnectionException, BadResponseException, LoginRequiredException
 class GetProfileInfo(APIView):
@@ -212,16 +212,8 @@ class GetProfileInfo(APIView):
                 print(profile_details)
                 
                 return Response(profile_details)
-            except ProfileNotExistsException:
-                return Response({'status':f"Profile '{username}' does not exist."})
-            except LoginRequiredException:
-                return Response({'status':"Login required to access this profile."})
-            except ConnectionException as e:
-                return Response({'status':f"Connection error: {e}"})
-            except BadResponseException as e:
-                return Response({'status':f"Bad response error: {e}"})
-            except Exception as e:
-                return Response({'status':f"An error occurred: {e}"})
+            except:
+                 return HttpResponseNotFound("error")
 
 
 

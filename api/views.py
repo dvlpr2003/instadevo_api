@@ -199,6 +199,7 @@ class GetProfileInfo(APIView):
                                         "story_video":story_cover
                                     }
                                 my_lst.append(Story)
+                                 
                 profile_details = {
                     'username': profile.username,
                     'full_name': profile.full_name,
@@ -213,7 +214,11 @@ class GetProfileInfo(APIView):
                 
                 return Response(profile_details)
             except:
-                 return HttpResponseNotFound("error")
+                os.system("rm -f ~/.config/instaloader/session-krishna_.kumar_.054")
+                print("session dlt")
+                loader.login(userid,password)
+                loader.save_session_to_file(session_file)
+                return HttpResponseNotFound("error")
 
 
 

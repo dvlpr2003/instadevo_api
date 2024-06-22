@@ -232,6 +232,7 @@ class GetStory(APIView):
         try:
             loader.load_session_from_file('krishna_.kumar_.054',session_file)
         except :
+            print("hi")
             os.system("rm -f ~/.config/instaloader/session-krishna_.kumar_.054")
             loader.login(userid,password)
             loader.save_session_to_file(session_file)
